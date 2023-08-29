@@ -1,6 +1,7 @@
 'use client'
 
 import Image from 'next/image'
+import { useRouter } from 'next/navigation'
 import { signIn } from 'next-auth/react'
 import React, { useCallback, useState } from 'react'
 
@@ -11,6 +12,23 @@ const Auth = () => {
   const [name, setName] = useState('')
   const [password, setPassword] = useState('')
   const [variant, setVariant] = useState('login')
+
+  const router = useRouter()
+
+  const login = useCallback(async () => {
+    try {
+      await signIn('credentials', {
+        email,
+        password,
+        redirect: false,
+        callbackUrl: '/',
+      })
+
+      router.push('/')
+    } catch (err) {
+      console.log(err)
+    }
+  }, [email, password, router])
 
   const toggleVariant = useCallback(
     () =>
@@ -32,13 +50,11 @@ const Auth = () => {
         }),
       })
 
-      setEmail('')
-      setName('')
-      setPassword('')
+      login()
     } catch (err) {
       console.log(err)
     }
-  }, [email, name, password])
+  }, [email, name, password, login])
 
   return (
     <div className="relative h-full  w-full bg-[url('/images/hero.jpg')] bg-no-repeat bg-center bg-fixed bg-cover">
@@ -77,7 +93,7 @@ const Auth = () => {
               />
             </div>
             <button
-              onClick={register}
+              onClick={variant === 'login' ? login : register}
               className="bg-red-600 py-3 text-white rounded-md w-full mt-10 hover:bg-red-700 transition"
             >
               {variant === 'login' ? 'Login' : 'Sign up'}
