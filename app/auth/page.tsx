@@ -1,6 +1,7 @@
 'use client'
 
 import Image from 'next/image'
+import { signIn } from 'next-auth/react'
 import React, { useCallback, useState } from 'react'
 
 import Input from '../components/Input'
@@ -18,6 +19,26 @@ const Auth = () => {
       ),
     [],
   )
+
+  const register = useCallback(async () => {
+    try {
+      await fetch('/api/auth/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email,
+          name,
+          password,
+        }),
+      })
+
+      setEmail('')
+      setName('')
+      setPassword('')
+    } catch (err) {
+      console.log(err)
+    }
+  }, [email, name, password])
 
   return (
     <div className="relative h-full  w-full bg-[url('/images/hero.jpg')] bg-no-repeat bg-center bg-fixed bg-cover">
@@ -55,7 +76,10 @@ const Auth = () => {
                 type="password"
               />
             </div>
-            <button className="bg-red-600 py-3 text-white rounded-md w-full mt-10 hover:bg-red-700 transition">
+            <button
+              onClick={register}
+              className="bg-red-600 py-3 text-white rounded-md w-full mt-10 hover:bg-red-700 transition"
+            >
               {variant === 'login' ? 'Login' : 'Sign up'}
             </button>
             <p className="text-neutral-500 mt-12">
