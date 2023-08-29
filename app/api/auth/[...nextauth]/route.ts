@@ -4,7 +4,7 @@ import Credentials from 'next-auth/providers/credentials'
 
 import prismadb from '@/lib/prismadb'
 
-export default NextAuth({
+const handler = NextAuth({
   providers: [
     Credentials({
       id: 'credentials',
@@ -15,7 +15,7 @@ export default NextAuth({
           type: 'text',
         },
         password: {
-          label: 'Passowrd',
+          label: 'Password',
           type: 'password',
         },
       },
@@ -57,3 +57,5 @@ export default NextAuth({
   },
   secret: process.env.NEXTAUTH_SECRET,
 })
+
+export { handler as GET, handler as POST }
