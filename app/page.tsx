@@ -1,13 +1,10 @@
 'use client'
 
-import { useRouter } from 'next/navigation'
 import { signOut } from 'next-auth/react'
 
-import useCurrentUser from './hooks/useCurrentUser'
+import useCurrentUser from '@/hooks/useCurrentUser'
 
 const Home = () => {
-  const router = useRouter()
-
   const { data: user } = useCurrentUser()
 
   return (
