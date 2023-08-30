@@ -2,6 +2,7 @@ import { redirect } from 'next/navigation'
 import { getServerSession } from 'next-auth'
 import React from 'react'
 
+import ProfileLayout from '@/components/ProfileLayout'
 import options from '@/lib/options'
 
 const ProfilePage = async () => {
@@ -9,7 +10,7 @@ const ProfilePage = async () => {
 
   if (!session) return redirect('/auth')
 
-  return <p className="text-white text-4xl">Profiles</p>
+  return <ProfileLayout />
 }
 
 export default ProfilePage
