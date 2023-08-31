@@ -28,7 +28,7 @@ const ProfileLayout = () => {
                 />
               </div>
               <div className="mt-4 text-gray-400 text-2xl text-center group-hover:text-white">
-                {data?.currentUser?.name}
+                {data?.currentUser.name}
               </div>
             </div>
           </div>
