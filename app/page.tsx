@@ -1,19 +1,17 @@
-'use client'
+import { redirect } from 'next/navigation'
+import { getServerSession } from 'next-auth'
 
-import { signOut } from 'next-auth/react'
+import Navbar from '@/components/Navbar'
+import options from '@/lib/options'
 
-import useCurrentUser from '@/hooks/useCurrentUser'
+const Home = async () => {
+  const session = await getServerSession(options)
 
-const Home = () => {
-  const { data: user } = useCurrentUser()
+  if (!session) return redirect('/auth')
 
   return (
     <>
-      <h1 className="text-4xl text-green-500">Netflix Clone</h1>
-      <p className="text-white">Logged in as: {user?.currentUser?.email}</p>
-      <button className="h-10 w-full bg-white" onClick={() => signOut()}>
-        Logout!
-      </button>
+      <Navbar />
     </>
   )
 }
