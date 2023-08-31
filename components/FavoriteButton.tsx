@@ -1,17 +1,17 @@
 'use client'
+import { useRouter } from 'next/navigation'
 import React, { useCallback, useMemo } from 'react'
 import { AiOutlineCheck, AiOutlinePlus } from 'react-icons/ai'
 
 import useCurrentUser from '@/hooks/useCurrentUser'
-import useFavorites from '@/hooks/useFavorites'
 
 type FavoriteButtonProps = {
   movieId: string
 }
 
 const FavoriteButton: React.FC<FavoriteButtonProps> = ({ movieId }) => {
-  const { mutate: mutateFavorites } = useFavorites()
   const { data: currentUser, mutate } = useCurrentUser()
+  const router = useRouter()
 
   const isFavorite = useMemo(() => {
     const list: string[] = currentUser?.favoriteIds || []
@@ -47,9 +47,8 @@ const FavoriteButton: React.FC<FavoriteButtonProps> = ({ movieId }) => {
       favoriteIds: updatedFavoriteIds,
     })
 
-    // マイリスト映画一覧を再取得（マイリストの最新化）
-    mutateFavorites()
-  }, [isFavorite, mutate, currentUser, mutateFavorites, movieId])
+    router.refresh()
+  }, [isFavorite, mutate, currentUser, movieId, router])
 
   const Icon = isFavorite ? AiOutlineCheck : AiOutlinePlus
 

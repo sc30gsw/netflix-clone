@@ -10,8 +10,6 @@ export const GET = async (req: NextRequest, res: NextResponse) => {
     if (req.method !== 'GET')
       return NextResponse.json({ message: 'Bad Request' }, { status: 405 })
 
-    await serverAuth()
-
     const movies = await prismadb.movie.findMany()
 
     return NextResponse.json(movies, { status: 200 })
