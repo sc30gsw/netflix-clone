@@ -1,19 +1,29 @@
 'use client'
 
+import { ErrorMessage } from '@hookform/error-message'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { signIn } from 'next-auth/react'
 import React, { useCallback, useState } from 'react'
+import type { SubmitHandler } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 import { FaGithub } from 'react-icons/fa'
 import { FcGoogle } from 'react-icons/fc'
 
-import Input from '@/components/Input'
+import type { AuthInput } from '@/types/AuthInput'
 
 const Auth = () => {
   const [email, setEmail] = useState('')
   const [name, setName] = useState('')
   const [password, setPassword] = useState('')
   const [variant, setVariant] = useState('login')
+
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<AuthInput>()
 
   const router = useRouter()
 
@@ -32,15 +42,17 @@ const Auth = () => {
     }
   }, [email, password, router])
 
-  const toggleVariant = useCallback(
-    () =>
-      setVariant((currentVariant) =>
-        currentVariant === 'login' ? 'register' : 'login',
-      ),
-    [],
-  )
+  const toggleVariant = useCallback(() => {
+    setVariant((currentVariant) =>
+      currentVariant === 'login' ? 'register' : 'login',
+    )
+    setName('')
+    setEmail('')
+    setPassword('')
+    reset()
+  }, [reset])
 
-  const register = useCallback(async () => {
+  const signUp = useCallback(async () => {
     try {
       await fetch('/api/auth/register', {
         method: 'POST',
@@ -58,6 +70,14 @@ const Auth = () => {
     }
   }, [email, name, password, login])
 
+  const onSubmit: SubmitHandler<AuthInput> = useCallback(
+    (data) => {
+      variant === 'login' ? login() : signUp()
+      reset()
+    },
+    [login, reset, signUp, variant],
+  )
+
   return (
     <div className="relative h-full  w-full bg-[url('/images/hero.jpg')] bg-no-repeat bg-center bg-fixed bg-cover">
       <div className="bg-black w-full h-full lg:bg-opacity-50">
@@ -69,37 +89,107 @@ const Auth = () => {
             <h2 className="text-white text-4xl mb-8 font-semibold">
               {variant === 'login' ? 'Sign in' : 'Register'}
             </h2>
-            <div className="flex flex-col gap-4">
-              {variant === 'register' && (
-                <Input
-                  id="name"
-                  onChange={(e) => setName(e.target.value)}
-                  value={name}
-                  label="Username"
-                  type="text"
-                />
-              )}
-              <Input
-                id="email"
-                onChange={(e) => setEmail(e.target.value)}
-                value={email}
-                label="Email"
-                type="email"
-              />
-              <Input
-                id="password"
-                onChange={(e) => setPassword(e.target.value)}
-                value={password}
-                label="Password"
-                type="password"
-              />
-            </div>
-            <button
-              onClick={variant === 'login' ? login : register}
-              className="bg-red-600 py-3 text-white rounded-md w-full mt-10 hover:bg-red-700 transition"
-            >
-              {variant === 'login' ? 'Login' : 'Sign up'}
-            </button>
+            <form onSubmit={handleSubmit(onSubmit)}>
+              <div className="flex flex-col gap-4">
+                {variant === 'register' && (
+                  <div className="relative">
+                    <input
+                      {...register('name', {
+                        required: 'ユーザー名は必須入力です',
+                        minLength: {
+                          value: 8,
+                          message: 'ユーザー名は8文字以上で入力してください',
+                        },
+                        maxLength: {
+                          value: 16,
+                          message: 'ユーザー名は16文字以内で入力してください',
+                        },
+                      })}
+                      id="name"
+                      onChange={(e) => setName(e.target.value)}
+                      value={name}
+                      type="text"
+                      className="block rounded-md px-6 pt-6 pb-1 w-full text-md text-white bg-neutral-700 appearance-none focus:outline-none focus:ring-0 peer"
+                      placeholder="  "
+                    />
+                    <label
+                      className="absolute text-md text-zinc-400 duration-150 transform -translate-y-3 scale-75 top-4 z-10 origin-[0] left-6 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-3"
+                      htmlFor="name"
+                    >
+                      Username
+                    </label>
+                    <span className="text-red-500">
+                      <ErrorMessage errors={errors} name="name" />
+                    </span>
+                  </div>
+                )}
+                <div className="relative">
+                  <input
+                    {...register('email', {
+                      required: 'メールアドレスは必須入力です',
+                      pattern: {
+                        value:
+                          /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/,
+                        message: 'メールアドレスの形式が不正です',
+                      },
+                    })}
+                    id="email"
+                    onChange={(e) => setEmail(e.target.value)}
+                    value={email}
+                    type="text"
+                    className="block rounded-md px-6 pt-6 pb-1 w-full text-md text-white bg-neutral-700 appearance-none focus:outline-none focus:ring-0 peer"
+                    placeholder="  "
+                  />
+                  <label
+                    className="absolute text-md text-zinc-400 duration-150 transform -translate-y-3 scale-75 top-4 z-10 origin-[0] left-6 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-3"
+                    htmlFor="email"
+                  >
+                    Email
+                  </label>
+                  <span className="text-red-500">
+                    <ErrorMessage errors={errors} name="email" />
+                  </span>
+                </div>
+                <div className="relative">
+                  <input
+                    {...register('password', {
+                      required: 'パスワードは必須入力です',
+                      minLength: {
+                        value: 8,
+                        message: 'パスワードは8文字以上で入力してください',
+                      },
+                      pattern: {
+                        value:
+                          /^(?=.*[0-9])(?=.*[A-Za-z])[A-Za-z0-9!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/? ]/,
+                        message:
+                          'パスワードは半角英数（記号を含む）で入力してください',
+                      },
+                    })}
+                    id="password"
+                    onChange={(e) => setPassword(e.target.value)}
+                    value={password}
+                    type="password"
+                    className="block rounded-md px-6 pt-6 pb-1 w-full text-md text-white bg-neutral-700 appearance-none focus:outline-none focus:ring-0 peer"
+                    placeholder="  "
+                  />
+                  <label
+                    className="absolute text-md text-zinc-400 duration-150 transform -translate-y-3 scale-75 top-4 z-10 origin-[0] left-6 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-3"
+                    htmlFor="password"
+                  >
+                    Password
+                  </label>
+                  <span className="text-red-500">
+                    <ErrorMessage errors={errors} name="password" />
+                  </span>
+                </div>
+              </div>
+              <button
+                type="submit"
+                className="bg-red-600 py-3 text-white rounded-md w-full mt-10 hover:bg-red-700 transition"
+              >
+                {variant === 'login' ? 'Login' : 'Sign up'}
+              </button>
+            </form>
             <div className="flex flex-row items-center gap-4 mt-8 justify-center">
               <div
                 onClick={() => signIn('google', { callbackUrl: '/profile' })}

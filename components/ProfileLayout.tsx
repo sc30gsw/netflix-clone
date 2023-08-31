@@ -7,7 +7,7 @@ import React from 'react'
 import useCurrentUser from '@/hooks/useCurrentUser'
 
 const ProfileLayout = () => {
-  const { data } = useCurrentUser()
+  const { data: user } = useCurrentUser()
   const router = useRouter()
 
   return (
@@ -28,7 +28,7 @@ const ProfileLayout = () => {
                 />
               </div>
               <div className="mt-4 text-gray-400 text-2xl text-center group-hover:text-white">
-                {data?.currentUser?.name}
+                {user?.name}
               </div>
             </div>
           </div>
