@@ -10,13 +10,7 @@ import { useForm } from 'react-hook-form'
 import { FaGithub } from 'react-icons/fa'
 import { FcGoogle } from 'react-icons/fc'
 
-import type Input from '@/components/Input'
-
-type Input = {
-  name: string
-  email: string
-  password: string
-}
+import type { AuthInput } from '@/types/AuthInput'
 
 const Auth = () => {
   const [email, setEmail] = useState('')
@@ -29,7 +23,7 @@ const Auth = () => {
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm<Input>()
+  } = useForm<AuthInput>()
 
   const router = useRouter()
 
@@ -56,7 +50,7 @@ const Auth = () => {
     setEmail('')
     setPassword('')
     reset()
-  }, [])
+  }, [reset])
 
   const signUp = useCallback(async () => {
     try {
@@ -76,7 +70,7 @@ const Auth = () => {
     }
   }, [email, name, password, login])
 
-  const onSubmit: SubmitHandler<Input> = useCallback(
+  const onSubmit: SubmitHandler<AuthInput> = useCallback(
     (data) => {
       variant === 'login' ? login() : signUp()
       reset()
