@@ -118,7 +118,7 @@ const Auth = () => {
                     >
                       Username
                     </label>
-                    <span className="text-red-500">
+                    <span className="text-red-500 text-xs">
                       <ErrorMessage errors={errors} name="name" />
                     </span>
                   </div>
@@ -146,7 +146,7 @@ const Auth = () => {
                   >
                     Email
                   </label>
-                  <span className="text-red-500">
+                  <span className="text-red-500 text-xs">
                     <ErrorMessage errors={errors} name="email" />
                   </span>
                 </div>
@@ -178,7 +178,7 @@ const Auth = () => {
                   >
                     Password
                   </label>
-                  <span className="text-red-500">
+                  <span className="text-red-500 text-xs">
                     <ErrorMessage errors={errors} name="password" />
                   </span>
                 </div>
