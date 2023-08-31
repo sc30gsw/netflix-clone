@@ -1,9 +1,9 @@
 import type { Movie } from '@prisma/client'
 import Link from 'next/link'
+import { redirect } from 'next/navigation'
+import { getServerSession } from 'next-auth'
 import React from 'react'
 import { AiOutlineArrowLeft } from 'react-icons/ai'
-
-import serverAuth from '@/lib/serverAuth'
 
 export const generateStaticParams = async () => {
   const res = await fetch(`${process.env.API_BASE_URL}/api/movies`)
@@ -16,7 +16,6 @@ export const generateStaticParams = async () => {
 
 const fetchMovie = async (movieId: string) => {
   try {
-    await serverAuth()
     const res = await fetch(`${process.env.API_BASE_URL}/api/movies/${movieId}`)
     const movie = await res.json()
 
@@ -33,6 +32,10 @@ type MoviePageProps = {
 }
 
 const MoviePage: React.FC<MoviePageProps> = async ({ params }) => {
+  const session = await getServerSession()
+
+  if (!session) return redirect('/auth')
+
   const movie = await fetchMovie(params.movieId)
 
   return (
