@@ -9,9 +9,10 @@ import Spinner from '@/components/Spinner'
 import options from '@/lib/options'
 import serverAuth from '@/lib/serverAuth'
 
+import ClientHome from '../components/ClientHome'
+
 const fetchMovies = async () => {
   try {
-    await serverAuth()
     const res = await fetch(`${process.env.API_BASE_URL}/api/movies`)
 
     const movies = await res.json()
@@ -50,6 +51,7 @@ const Home = async () => {
 
   return (
     <>
+      <ClientHome />
       <Navbar />
       <Suspense fallback={<Spinner />}>
         <Billboard />
