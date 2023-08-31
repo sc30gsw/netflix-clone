@@ -1,19 +1,16 @@
 import { redirect } from 'next/navigation'
 import { getServerSession } from 'next-auth'
+import React from 'react'
 
-import Navbar from '@/components/Navbar'
+import ProfileLayout from '@/components/ProfileLayout'
 import options from '@/lib/options'
 
-const Home = async () => {
+const ProfilePage = async () => {
   const session = await getServerSession(options)
 
   if (!session) return redirect('/auth')
 
-  return (
-    <>
-      <Navbar />
-    </>
-  )
+  return <ProfileLayout />
 }
 
-export default Home
+export default ProfilePage

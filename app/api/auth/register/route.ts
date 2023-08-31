@@ -1,10 +1,11 @@
 import bcrypt from 'bcrypt'
+import type { NextRequest } from 'next/server'
 import { NextResponse } from 'next/server'
 
 import prismadb from '@/lib/prismadb'
 
 // ユーザー新規登録API
-export const POST = async (req: Request, res: NextResponse) => {
+export const POST = async (req: NextRequest, res: NextResponse) => {
   try {
     if (req.method !== 'POST')
       return NextResponse.json({ message: 'Bad Request' }, { status: 405 })

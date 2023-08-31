@@ -7,7 +7,7 @@ import React, { useCallback, useState } from 'react'
 import { FaGithub } from 'react-icons/fa'
 import { FcGoogle } from 'react-icons/fc'
 
-import Input from '../components/Input'
+import Input from '@/components/Input'
 
 const Auth = () => {
   const [email, setEmail] = useState('')
@@ -23,10 +23,10 @@ const Auth = () => {
         email,
         password,
         redirect: false,
-        callbackUrl: '/',
+        callbackUrl: '/profile',
       })
 
-      router.push('/')
+      router.push('/profile')
     } catch (err) {
       console.log(err)
     }
@@ -102,13 +102,13 @@ const Auth = () => {
             </button>
             <div className="flex flex-row items-center gap-4 mt-8 justify-center">
               <div
-                onClick={() => signIn('google', { callbackUrl: '/' })}
+                onClick={() => signIn('google', { callbackUrl: '/profile' })}
                 className="w-10 h-10 bg-white rounded-full flex items-center justify-center cursor-pointer hover:opacity-89 transition"
               >
                 <FcGoogle size={30} />
               </div>
               <div
-                onClick={() => signIn('github', { callbackUrl: '/' })}
+                onClick={() => signIn('github', { callbackUrl: '/profile' })}
                 className="w-10 h-10 bg-white rounded-full flex items-center justify-center cursor-pointer hover:opacity-89 transition"
               >
                 <FaGithub size={30} />
