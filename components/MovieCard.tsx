@@ -4,6 +4,7 @@ import Link from 'next/link'
 import React from 'react'
 import { BsFillPlayFill } from 'react-icons/bs'
 
+import DownButton from './DownButton'
 import FavoriteButton from './FavoriteButton'
 
 type MovieCardProps = {
@@ -76,6 +77,7 @@ const MovieCard: React.FC<MovieCardProps> = ({ data }) => {
               <BsFillPlayFill size={30} />
             </Link>
             <FavoriteButton movieId={data.id} />
+            <DownButton movieId={data.id} />
           </div>
           <p className="text-green-400 font-semibold mt-4">
             New <span className="tet-white">2023</span>

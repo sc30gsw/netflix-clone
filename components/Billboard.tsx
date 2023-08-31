@@ -1,14 +1,13 @@
+import { redirect } from 'next/navigation'
+import { getServerSession } from 'next-auth'
 import React from 'react'
-import { AiOutlineInfoCircle } from 'react-icons/ai'
 
-import serverAuth from '@/lib/serverAuth'
-
+import options from '../lib/options'
+import MoreInfoButton from './MoreInfoButton'
 import PlayButton from './PlayButton'
 
 const fetchRandomMovies = async () => {
   try {
-    await serverAuth()
-
     const res = await fetch(`${process.env.API_BASE_URL}/api/random`)
 
     const randomMovies = await res.json()
@@ -20,6 +19,10 @@ const fetchRandomMovies = async () => {
 }
 
 const Billboard = async () => {
+  const session = await getServerSession(options)
+
+  if (!session) return redirect('/auth')
+
   const randomMovies = await fetchRandomMovies()
 
   return (
@@ -41,10 +44,7 @@ const Billboard = async () => {
         </p>
         <div className="flex flex-row items-center mt-3 md:mt-4 gap-3">
           <PlayButton movieId={randomMovies[0]?.id} />
-          <button className="h-10 bg-white text-white bg-opacity-30 rounded-md py-1 md:py-2 px-2 md:px-4 w-auto text-base lg:text-lg flex flex-row items-center hover:bg-opacity-20 transition font-bold">
-            <AiOutlineInfoCircle className="mr-1" />
-            More Info
-          </button>
+          <MoreInfoButton movieId={randomMovies[0]?.id} />
         </div>
       </div>
     </div>
