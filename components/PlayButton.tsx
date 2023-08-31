@@ -1,3 +1,5 @@
+'use client'
+
 import Link from 'next/link'
 import React from 'react'
 import { BsFillPlayFill } from 'react-icons/bs'
