@@ -9,7 +9,7 @@ type AccountMenuProps = {
 }
 
 const AccountMenu: React.FC<AccountMenuProps> = ({ visible }) => {
-  const { data } = useCurrentUser()
+  const { data: user } = useCurrentUser()
 
   if (!visible) return null
 
@@ -25,7 +25,7 @@ const AccountMenu: React.FC<AccountMenuProps> = ({ visible }) => {
             height={32}
           />
           <p className="text-white text-sm group-hover/item:underline">
-            {data?.currentUser.name}
+            {user?.name}
           </p>
         </div>
         <hr className="bg-gray-600 border-0 h-px my-4" />

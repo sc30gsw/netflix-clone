@@ -29,7 +29,7 @@ export const GET = async (req: NextRequest, res: NextResponse) => {
       skip: randomIndex,
     })
 
-    return NextResponse.json({ randomMovies }, { status: 200 })
+    return NextResponse.json(randomMovies, { status: 200 })
   } catch (err: any) {
     return NextResponse.json({ message: err.message }, { status: 500 })
   }

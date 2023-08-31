@@ -14,7 +14,7 @@ export const GET = async (req: NextRequest, res: NextResponse) => {
 
     const movies = await prismadb.movie.findMany()
 
-    return NextResponse.json({ movies }, { status: 200 })
+    return NextResponse.json(movies, { status: 200 })
   } catch (err: any) {
     return NextResponse.json({ message: err.message }, { status: 500 })
   }

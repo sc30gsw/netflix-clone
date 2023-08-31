@@ -10,7 +10,7 @@ export const GET = async (req: NextRequest, res: NextResponse) => {
 
     const { currentUser } = await serverAuth()
 
-    return NextResponse.json({ currentUser }, { status: 200 })
+    return NextResponse.json(currentUser, { status: 200 })
   } catch (err: any) {
     return NextResponse.json({ message: err.message }, { status: 500 })
   }
