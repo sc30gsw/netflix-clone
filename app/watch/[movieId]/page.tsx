@@ -5,14 +5,14 @@ import { getServerSession } from 'next-auth'
 import React from 'react'
 import { AiOutlineArrowLeft } from 'react-icons/ai'
 
-export const generateStaticParams = async () => {
-  const res = await fetch(`${process.env.API_BASE_URL}/api/movies`)
-  const movies = await res.json()
+// export const generateStaticParams = async () => {
+//   const res = await fetch(`${process.env.API_BASE_URL}/api/movies`)
+//   const movies = await res.json()
 
-  return movies.map((movie: Movie) => ({
-    movieId: movie.id,
-  }))
-}
+//   return movies.map((movie: Movie) => ({
+//     movieId: movie.id,
+//   }))
+// }
 
 const fetchMovie = async (movieId: string) => {
   try {
